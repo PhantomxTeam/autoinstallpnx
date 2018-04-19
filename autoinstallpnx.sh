@@ -43,7 +43,7 @@ echo ""
 outputColorBlue "#########################################################"
 outputColorBlue "###  Please select if you want to update & upgrade    ###"
 outputColorBlue "###  your linux distribution before start compiling   ###"
-outputColorBlue  "###  and setting up your PNX wallet                   ###"
+outputColorBlue "###  and setting up your PNX wallet                   ###"
 outputColorBlue "###                                                   ###"
 outputColorBlue "###  It's extremely recommended                       ###"
 outputColorBlue "#########################################################"
@@ -58,7 +58,7 @@ outputColorYellow "###########################################################"
 outputColorYellow "###              Updating Linux distribution            ###"
 outputColorYellow "###########################################################"
 
-if [[ ("$update_question" == "y" || "$update_question" == "Y" || "$update_question" == "") ]]; then
+if [[ ("$update_question" == "y" || "$update_question" == "Y") ]]; then
    echo "Updating & upgrading your linux distribution"
    sudo apt-get -y update
    sudo apt-get -y upgrade
