@@ -62,7 +62,7 @@ if [[ ("$update_question" == "y" || "$update_question" == "Y") ]]; then
    echo "Updating & upgrading your linux distribution"
    sudo apt-get -y update
    sudo apt-get -y upgrade
-   sudo apt-get dist-upgrade
+   sudo apt-get -y dist-upgrade
 else
   echo "No need to update; No option has been chosen"
 fi
@@ -91,7 +91,7 @@ outputColorYellow "############################################################"
 lineSwap=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
 #echo "$line"
 
-if [ $lineSwap -le 1024 ]
+if [ $lineSwap -le 100000 ]
  then
    echo "Not enought RAM, so creating a 2 Gb swap file"
    sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=2048
