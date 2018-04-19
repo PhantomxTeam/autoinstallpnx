@@ -28,11 +28,27 @@ outputColorYellow() {
     printf "\E[0m"
 }
 
+outputColorBlue() {
+    printf "\E[0;34;40m"
+    echo "$1"
+    printf "\E[0m"
+}
+
 outputColorGreen "============================================================"
 outputColorGreen "==================== P H A N T O M   X ====================="
 outputColorGreen "============================================================"
-
+echo ""
+echo ""
+echo ""
+outputColorBlue "#########################################################"
+outputColorBlue "###  Please select if you want to update & upgrade    ###"
+outputColorBlue "###  your linux distribution before start compiling   ###"
+outputColorBlue  "###  and setting up your PNX wallet                   ###"
+outputColorBlue "###                                                   ###"
+outputColorBlue "###  It's extremely recommended                       ###"
+outputColorBlue "#########################################################"
 sleep 3
+read -e -p "Do you want to update&upgrade your server before continue?:[y/N] " update_question
 
 ###############################################################################
 ###############################################################################
@@ -42,10 +58,14 @@ outputColorYellow "###########################################################"
 outputColorYellow "###              Updating Linux distribution            ###"
 outputColorYellow "###########################################################"
 
-
-sudo apt-get -y update
-sudo apt-get -y upgrade
-sudo apt-get dist-upgrade
+if [[ ("$update_question" == "y" || "$update_question" == "Y" || "$update_question" == "") ]]; then
+   echo "Updating & upgrading your linux distribution"
+   sudo apt-get -y update
+   sudo apt-get -y upgrade
+   sudo apt-get dist-upgrade
+else
+  echo "No need to update; No option has been chosen"
+fi
 
 ###############################################################################
 ###############################################################################
