@@ -29,7 +29,7 @@ outputColorYellow() {
 }
 
 outputColorBlue() {
-    printf "\E[0;34;40m"
+    printf "\E[0;31;40m"
     echo "$1"
     printf "\E[0m"
 }
@@ -71,6 +71,29 @@ fi
 ###############################################################################
 ###############################################################################
 
+$isRpi = $(cat /proc/device-tree/model)
+$keymatch="Raspberry"
+
+if echo "$isRpi" | grep -q "$keymatch";
+ then
+    outputColorYellow "###########################################################"
+    outputColorYellow "###      Changing SSL repository for Raspberry Pi 3     ###"
+    outputColorYellow "###########################################################"
+
+    echo "Raspberry Pi detected; modifying libssl-dev repository"
+    sudo apt-get remove -y libssl-dev
+    sudo sed -i -e 's/stretch/jessie/g' /etc/apt/sources.list
+    sudo apt-get -y update
+    sudo apt-get install -y libssl-dev
+
+  else
+    echo "Not needed to modify libssl-dev repository"
+fi
+
+###############################################################################
+###############################################################################
+###############################################################################
+
 outputColorYellow "############################################################"
 outputColorYellow "### Install all necessary packages for building PhantomX ###"
 outputColorYellow "############################################################"
@@ -91,7 +114,7 @@ outputColorYellow "############################################################"
 lineSwap=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
 #echo "$line"
 
-if [ $lineSwap -le 100000 ]
+if [ $lineSwap -le 999999 ]
  then
    echo "Not enought RAM, so creating a 2 Gb swap file"
    sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=2048
@@ -202,6 +225,9 @@ sudo cp  /wallets/wallets/latest-blockchain/blk0001.dat /wallets/phantomx/wallet
 echo "Removing temp files"
 sudo rm -r /wallets/latest-blockchain.zip
 sudo rm -r /wallets/wallets
+
+echo "Fixing Permissions for non default root user"
+sudo chmod 777 -R /wallets
 
 outputColorGreen "################################################################"
 outputColorGreen "#                                                              #"
