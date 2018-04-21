@@ -48,7 +48,7 @@ outputColorBlue "###                                                   ###"
 outputColorBlue "###  It's extremely recommended                       ###"
 outputColorBlue "#########################################################"
 sleep 3
-read -e -p "Do you want to update&upgrade your server before continue?:[y/N] " update_question
+read -e -p "Do you want to upgrade your server before continue?:[y/N] " upgrade_question
 
 ###############################################################################
 ###############################################################################
@@ -58,7 +58,7 @@ outputColorYellow "###########################################################"
 outputColorYellow "###              Updating Linux distribution            ###"
 outputColorYellow "###########################################################"
 
-if [[ ("$update_question" == "y" || "$update_question" == "Y") ]]; then
+if [[ ("$upgrade_question" == "y" || "$upgrade_question" == "Y") ]]; then
    echo "Updating & upgrading your linux distribution"
    sudo apt-get -y update
    sudo apt-get -y upgrade
@@ -71,11 +71,11 @@ fi
 ###############################################################################
 ###############################################################################
 
-$isRpi = $(cat /proc/device-tree/model)
-$keymatch="Raspberry"
+isRpi=$(uname -n)
+keymatch="raspberrypi"
 
-if echo "$isRpi" | grep -q "$keymatch";
- then
+ if [[ "$isRpi" == "$keymatch" ]];
+  then
     outputColorYellow "###########################################################"
     outputColorYellow "###      Changing SSL repository for Raspberry Pi 3     ###"
     outputColorYellow "###########################################################"
@@ -86,9 +86,9 @@ if echo "$isRpi" | grep -q "$keymatch";
     sudo apt-get -y update
     sudo apt-get install -y libssl-dev
 
-  else
+   else
     echo "Not needed to modify libssl-dev repository"
-fi
+ fi
 
 ###############################################################################
 ###############################################################################
