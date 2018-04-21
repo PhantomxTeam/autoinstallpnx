@@ -29,7 +29,7 @@ outputColorYellow() {
 }
 
 outputColorBlue() {
-    printf "\E[0;34;40m"
+    printf "\E[0;31;40m"
     echo "$1"
     printf "\E[0m"
 }
@@ -48,7 +48,7 @@ outputColorBlue "###                                                   ###"
 outputColorBlue "###  It's extremely recommended                       ###"
 outputColorBlue "#########################################################"
 sleep 3
-read -e -p "Do you want to update&upgrade your server before continue?:[y/N] " update_question
+read -e -p "Do you want to upgrade your server before continue?:[y/N] " upgrade_question
 
 ###############################################################################
 ###############################################################################
@@ -58,7 +58,7 @@ outputColorYellow "###########################################################"
 outputColorYellow "###              Updating Linux distribution            ###"
 outputColorYellow "###########################################################"
 
-if [[ ("$update_question" == "y" || "$update_question" == "Y") ]]; then
+if [[ ("$upgrade_question" == "y" || "$upgrade_question" == "Y") ]]; then
    echo "Updating & upgrading your linux distribution"
    sudo apt-get -y update
    sudo apt-get -y upgrade
@@ -66,6 +66,29 @@ if [[ ("$update_question" == "y" || "$update_question" == "Y") ]]; then
 else
   echo "No need to update; No option has been chosen"
 fi
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+isRpi=$(uname -n)
+keymatch="raspberrypi"
+
+ if [[ "$isRpi" == "$keymatch" ]];
+  then
+    outputColorYellow "###########################################################"
+    outputColorYellow "###      Changing SSL repository for Raspberry Pi 3     ###"
+    outputColorYellow "###########################################################"
+
+    echo "Raspberry Pi detected; modifying libssl-dev repository"
+    sudo apt-get remove -y libssl-dev
+    sudo sed -i -e 's/stretch/jessie/g' /etc/apt/sources.list
+    sudo apt-get -y update
+    sudo apt-get install -y libssl-dev
+
+   else
+    echo "Not needed to modify libssl-dev repository"
+ fi
 
 ###############################################################################
 ###############################################################################
@@ -91,7 +114,7 @@ outputColorYellow "############################################################"
 lineSwap=$(awk '/MemTotal/ { print $2 }' /proc/meminfo)
 #echo "$line"
 
-if [ $lineSwap -le 100000 ]
+if [ $lineSwap -le 999999 ]
  then
    echo "Not enought RAM, so creating a 2 Gb swap file"
    sudo /bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=2048
@@ -202,6 +225,9 @@ sudo cp  /wallets/wallets/latest-blockchain/blk0001.dat /wallets/phantomx/wallet
 echo "Removing temp files"
 sudo rm -r /wallets/latest-blockchain.zip
 sudo rm -r /wallets/wallets
+
+echo "Fixing Permissions for non default root user"
+sudo chmod 777 -R /wallets
 
 outputColorGreen "################################################################"
 outputColorGreen "#                                                              #"
