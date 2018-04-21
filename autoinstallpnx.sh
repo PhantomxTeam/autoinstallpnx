@@ -98,7 +98,7 @@ outputColorYellow "############################################################"
 outputColorYellow "### Install all necessary packages for building PhantomX ###"
 outputColorYellow "############################################################"
 
-sudo apt-get install -y dnsutils
+sudo apt-get install -y automake dnsutils
 sudo apt-get install -y build-essential libssl-dev libboost-all-dev git
 sudo apt-get install -y libdb5.3++-dev libminiupnpc-dev screen autoconf
 sudo apt-get install -y unzip
