@@ -8,18 +8,27 @@ TUTO Youtube : https://youtu.be/4oo4CqRBMh8
 
 ***********************************
 
+
+
 ## Prerequisites
 
-- Ubuntu 16.04
+- Ubuntu 16.04 or Debian or Raspbian (Raspberry Pi)
 - Root access
 - Network Connection
+
+## Tested on
+
+- Ubuntu 16.04
+- Debian
+- Raspberry Pi 2 (Raspbian Stretch Lite)
+- Raspberry Pi 3 (Raspbian Stretch Lite)
 
 
 ### Install script to get PNX wallet on Ubuntu 16.04
 
-USE THIS SCRIPT ON FRESH INSTALL UBUNTU 16.04 !
+USE THIS SCRIPT ON FRESH SYSTEM INSTALL !
 
-Connect on your VPS & execute the following commands
+Connect to your System using SSH & execute the following commands
 
     cd ~
     wget https://raw.githubusercontent.com/PhantomxTeam/autoinstallpnx/master/autoinstallpnx.sh

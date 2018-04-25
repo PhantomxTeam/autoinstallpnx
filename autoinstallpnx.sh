@@ -1,9 +1,10 @@
 #!/bin/bash
 ################################################################################
 # Original Author:   Alex Lucas
+# Updated by: @Aangel
 # Forked from: https://github.com/phantomxdev/phantomx
 # Web: http://www.phantomx.org
-# Version: 1.2
+# Version: 1.5
 #
 # Usage:
 #   This script is for auto-compile the PNX wallet taken from github official
@@ -11,7 +12,8 @@
 #
 # Tested on
 #   Ubuntu 16.04
-#   Raspberry Pi 3 (not tested yet)
+#   Raspberry Pi 3
+#   Debian
 #
 ################################################################################
 
@@ -71,29 +73,6 @@ fi
 ###############################################################################
 ###############################################################################
 
-isRpi=$(uname -n)
-keymatch="raspberrypi"
-
- if [[ "$isRpi" == "$keymatch" ]];
-  then
-    outputColorYellow "###########################################################"
-    outputColorYellow "###      Changing SSL repository for Raspberry Pi 3     ###"
-    outputColorYellow "###########################################################"
-
-    echo "Raspberry Pi detected; modifying libssl-dev repository"
-    sudo apt-get remove -y libssl-dev
-    sudo sed -i -e 's/stretch/jessie/g' /etc/apt/sources.list
-    sudo apt-get -y update
-    sudo apt-get install -y libssl-dev
-
-   else
-    echo "Not needed to modify libssl-dev repository"
- fi
-
-###############################################################################
-###############################################################################
-###############################################################################
-
 outputColorYellow "############################################################"
 outputColorYellow "### Install all necessary packages for building PhantomX ###"
 outputColorYellow "############################################################"
@@ -102,6 +81,32 @@ sudo apt-get install -y automake dnsutils
 sudo apt-get install -y build-essential libssl-dev libboost-all-dev git
 sudo apt-get install -y libdb5.3++-dev libminiupnpc-dev screen autoconf
 sudo apt-get install -y unzip
+
+###############################################################################
+###############################################################################
+###############################################################################
+
+isRpi=$(cat /etc/os-release |grep ^ID= | awk -F= '{print $2}')
+keymatch="raspbian"
+keymatch1="debian"
+
+ if [[ "$isRpi" == "$keymatch" || "$isRpi" == "$keymatch1" ]];
+  then
+    outputColorYellow "####################################################################"
+    outputColorYellow "###      Changing SSL repository for Debian / Raspberry Pi 3     ###"
+    outputColorYellow "####################################################################"
+
+    echo "Raspberry Pi detected; modifying libssl-dev repository"
+    sudo apt-get remove -y libssl-dev
+    sudo apt-get install -y zlib1g-dev
+    sudo sed -i -e 's/stretch/jessie/g' /etc/apt/sources.list
+    sudo apt-get -y update
+    sudo apt-get install -y libssl-dev
+    sudo sed -i -e 's/jessie/stretch/g' /etc/apt/sources.list
+    sudo apt-get -y update
+   else
+    echo "Not needed to modify libssl-dev repository"
+ fi
 
 ###############################################################################
 ###############################################################################
@@ -229,24 +234,32 @@ sudo rm -r /wallets/wallets
 echo "Fixing Permissions for non default root user"
 sudo chmod 777 -R /wallets
 
-outputColorGreen "################################################################"
-outputColorGreen "#                                                              #"
-outputColorGreen "#                          ALL DONE                            #"
-outputColorGreen "#                                                              #"
-outputColorGreen "#  Compiled Phantomx file path: /wallets/phantomx/phantomxd    #"
-outputColorGreen "#  PhantomX database dir: /wallets/phantomx/wallet             #"
-outputColorGreen "#  PNX Conf file path: /wallets/phantomx/wallet/phantomx.conf  #"
-outputColorGreen "#                                                              #"
-outputColorGreen "#   To run pnx wallet run the following command:               #"
-outputColorGreen "#                                                              #"
-outputColorGreen "#   /wallets/phantomx/phantomxd                                #"
-outputColorGreen "#     -datadir=/wallets/phantomx/wallet -daemon -start         #"
-outputColorGreen "#                                                              #"
-outputColorGreen "################################################################"
-outputColorGreen "#                            Infos                             #"
-outputColorGreen "################################################################"
-outputColorGreen "#                                                              #"
-outputColorGreen "# Visit our website: http://www.phantomx.co                    #"
-outputColorGreen "# Check guides how to create masternodes & news about PhantomX #"
-outputColorGreen "#                                                              #"
-outputColorGreen "################################################################"
+
+if [[ -f /wallets/phantomx/phantomxd ]]; then
+
+	outputColorGreen "################################################################"
+	outputColorGreen "#                                                              #"
+	outputColorGreen "#                          ALL DONE                            #"
+	outputColorGreen "#                                                              #"
+	outputColorGreen "#  Compiled Phantomx file path: /wallets/phantomx/phantomxd    #"
+	outputColorGreen "#  PhantomX database dir: /wallets/phantomx/wallet             #"
+	outputColorGreen "#  PNX Conf file path: /wallets/phantomx/wallet/phantomx.conf  #"
+	outputColorGreen "#                                                              #"
+	outputColorGreen "#   To run pnx wallet run the following command:               #"
+	outputColorGreen "#                                                              #"
+	outputColorGreen "#   /wallets/phantomx/phantomxd                                #"
+	outputColorGreen "#     -datadir=/wallets/phantomx/wallet -daemon -start         #"
+	outputColorGreen "#                                                              #"
+	outputColorGreen "################################################################"
+	outputColorGreen "#                            Infos                             #"
+	outputColorGreen "################################################################"
+	outputColorGreen "#                                                              #"
+	outputColorGreen "# Visit our website: http://www.phantomx.co                    #"
+	outputColorGreen "# Check guides how to create masternodes & news about PhantomX #"
+	outputColorGreen "#                                                              #"
+	outputColorGreen "################################################################"
+
+else
+	outputColorYellow "FAILED! Scroll up for details."
+
+fi
