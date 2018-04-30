@@ -1,6 +1,6 @@
 # PhantomX wallet Auto-Install Script
 
-Website: http://phantomx.co
+Website: http://www.phantomx.org
 
 Telegram Group: https://t.me/joinchat/GuzdQUN9fdpX3fSJ4bqWTQ
 
