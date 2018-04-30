@@ -157,7 +157,7 @@ outputColorYellow "# Downloading source code from Github  #"
 outputColorYellow "########################################"
 
 cd /wallets
-git clone https://github.com/phantomxdev/phantomx.git phantomx
+git clone https://github.com/PhantomxTeam/phantomx-beta-wallet.git phantomx
 
 
 outputColorYellow "####################################"
@@ -165,6 +165,7 @@ outputColorYellow "# Compiling Level DB Prerrequisite #"
 outputColorYellow "####################################"
 
 cd /wallets/phantomx/src/leveldb
+make clean
 chmod +x build_detect_platform
 make libleveldb.a libmemenv.a
 
@@ -174,6 +175,7 @@ outputColorYellow "# Compiling SECP256 Prerrequisite #"
 outputColorYellow "###################################"
 
 cd /wallets/phantomx/src/secp256k1
+make clean
 chmod +x autogen.sh
 ./autogen.sh
 ./configure
